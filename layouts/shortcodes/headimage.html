@@ -1,0 +1,5 @@
+{{- /* Shortcode that includes an image with full width */ -}}
+{{ $src := .Get "src" }}
+<div style="width: 100%; text-align: center;">
+    <img src="{{ $src | absURL }}" style="width: 80%;" alt="{{ $src }}" class="not-prose">
+</div>

@@ -1,0 +1,30 @@
+.content {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.content :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) li {
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+}
+
+
+.content :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+    margin-top: 1rem;
+}
+
+
+/* Hide images with #gh-dark-mode-only at the end of the URL if light mode is enabled */
+html:not(.dark) img[src$="#gh-dark-mode-only"] {
+    display: none;
+}
+
+
+/* Hide images with #gh-light-mode-only at the end of the URL if dark mode is enabled */
+html.dark img[src$="#gh-light-mode-only"] {
+    display: none;
+}
+
+/* Prevent line breaks next to icons */
+span svg {
+    display: inline-block;
+}

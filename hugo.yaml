@@ -1,0 +1,59 @@
+# ================================================================= #
+# *                                                               * #
+# *                        Global settings                        * #
+# *                                                               * #
+# ================================================================= #
+
+baseURL: https://s1lver-lining.github.io
+languageCode: en-us
+title: Silver Lining
+theme: hextra
+ignoreFiles: ["README.md", "TODO.md"]
+
+
+
+# ================================================================= #
+# *                                                               * #
+# *                       Theme parameters                        * #
+# *                                                               * #
+# ================================================================= #
+
+params:
+  footer:
+    displayPoweredBy: false
+  navbar:
+    displayLogo: false
+  theme:
+    default: system
+    displayToggle: false
+
+
+# ================================================================= #
+# *                                                               * #
+# *                               Menu                            * #
+# *                                                               * #
+# ================================================================= #
+
+menu:
+  main:
+    - name: Notes
+      pageRef: /sl
+      weight: 100
+    - name: Write-Ups
+      pageRef: /wu
+      weight: 200
+    - name: Toggle
+      weight: 300
+      params:
+        type: toggle
+    - name: Search
+      weight: 400
+      params:
+        type: search
+
+
+# ================================================================= #
+# *                                                               * #
+# *                        Markup configs                         * #
+# *                                                               * #
+# ================================================================= #

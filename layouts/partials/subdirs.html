@@ -1,5 +1,7 @@
-<div class="hextra-cards mt-12 gap-4 grid not-prose border-t pt-8 dark:border-neutral-800 contrast-more:border-neutral-400 dark:contrast-more:border-neutral-400 print:hidden" style="--rows: 2;">
-    {{ with $items := union .RegularPages .Sections }}
+<div class="hextra-cards gap-4 grid not-prose print:hidden" style="--rows: 2;">
+
+  {{- /* List the subdirectories in cards */ -}}
+  {{ with $items := union .RegularPages .Sections }}
     {{ $items = where $items "Params.sidebar.exclude" "!=" true }}
       {{ range $items.ByWeight }}
         {{ $title := .LinkTitle | default .File.BaseFileName }}

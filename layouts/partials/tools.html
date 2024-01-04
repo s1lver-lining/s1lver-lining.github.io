@@ -1,0 +1,67 @@
+{{- /* If there is a tools section */ -}}
+{{ with $items := union .RegularPages .Sections }}
+  {{ $items = where $items "Params.roottoolsection" "==" true }}
+  {{ if ne (len $items) 0 }}
+    {{ template "tools-main" (dict "context" . "page" .)}}
+  {{ end }}
+{{ end }}
+
+{{- define "tools-main" -}}
+<div class="hextra-filetree mt-6 select-none text-sm text-gray-800 dark:text-gray-300 not-prose">
+    <div class="inline-block rounded-lg border px-4 py-2 dark:border-neutral-800">
+        {{ template "tools-tree" (dict "context" .context "level" 0 "page" .page "pageURL" .pageURL "toc" (.toc | default false)) }}
+    </div>
+  </div>  
+{{- end -}}
+
+{{- define "tools-tree" -}}
+  {{- if ge .level 4 -}}
+    {{- return -}}
+  {{- end -}}
+
+  {{- $context := .context -}}
+  {{- $page := .page }}
+  {{- $pageURL := .page.RelPermalink -}}
+  {{- $level := .level -}}
+  {{- $toc := .toc | default false -}}
+
+  {{- with $items := union .context.RegularPages .context.Sections -}}
+    {{- $items = where $items "Params.roottoolsection" "==" true -}}
+    {{- if eq $level 0 -}}
+      {{- range $items.ByWeight }}
+        {{- if .Params.sidebar.separator -}}
+          <li class="[word-break:break-word] mt-5 mb-2 px-2 py-1.5 text-sm font-semibold text-gray-900 first:mt-0 dark:text-gray-100">
+            <span class="cursor-default">{{ .LinkTitle }}</span>
+          </li>
+        {{- else -}}
+          {{- $active := eq $pageURL .RelPermalink -}}
+          {{- $shouldOpen := or (.Params.sidebar.open) (.IsAncestor $page) $active | default true }}
+          <li class="{{ if $shouldOpen }}open{{ end }}">
+            {{- template "sidebar-item-link" dict "context" . "active" $active "title" .LinkTitle "link" .RelPermalink -}}
+            {{- if and $toc $active -}}
+              {{- template "sidebar-toc" dict "page" . -}}
+            {{- end -}}
+            {{- template "tools-tree" dict "context" . "page" $page "pageURL" $pageURL "level" (add $level 1) "toc" $toc -}}
+          </li>
+        {{- end -}}
+      {{- end -}}
+    {{- else -}}
+      <div class="ltr:pr-0 overflow-hidden">
+        <ul class='relative flex flex-col gap-1 before:absolute before:inset-y-1 before:w-px before:bg-gray-200 before:content-[""] ltr:ml-3 ltr:pl-3 ltr:before:left-0 rtl:mr-3 rtl:pr-3 rtl:before:right-0 dark:before:bg-neutral-800'>
+            {{- range $items.ByWeight }}
+                {{- $active := eq $pageURL .RelPermalink -}}
+                {{- $shouldOpen := or (.Params.sidebar.open) (.IsAncestor $page) $active | default true }}
+                {{- $title := .LinkTitle | default .File.BaseFileName -}}
+                <li class="flex flex-col {{ if $shouldOpen }}open{{ end }}">
+                {{- template "sidebar-item-link" dict "context" . "active" $active "title" $title "link" .RelPermalink -}}
+                {{- if and $toc $active -}}
+                    {{ template "sidebar-toc" dict "page" . }}
+                {{- end }}
+                {{ template "tools-tree" dict "context" . "page" $page "pageURL" $pageURL "level" (add $level 1) "toc" $toc }}
+                </li>
+            {{- end -}}
+        </ul>
+        </div>
+    {{- end -}}
+    {{- end }}
+{{- end -}}

@@ -5,9 +5,12 @@ build: prebuild
 	rm -rf public
 	hugo
 
+generate:
+	git submodule update --init --recursive
+
 submodules:
 	git submodule update --recursive --remote
 
 prebuild:
-	scripts/prebuild.sh content/sl
-	scripts/prebuild.sh content/wu
+	scripts/prebuild.py content/sl
+	scripts/prebuild.py content/wu

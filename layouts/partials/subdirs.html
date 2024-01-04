@@ -12,6 +12,19 @@
           href="{{ $href }}"
         >
           <span class="flex font-semibold items-start gap-2 p-4 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
+            {{ if .Params.svg }}
+            {{ $path := "" }}
+            {{ with .File }}
+                  {{ $path = .Path }}
+            {{ else }}
+                  {{ $path = .Path }}
+            {{ end }}
+            {{ $lastdir := last 1 (split $path "/") }}
+            {{ $lastdir = index $lastdir 0 }}
+            {{ $path = replace $path $lastdir "" }}
+            {{ $icon := readFile (printf "%s/icon.svg" $path) }}
+            {{ $icon | safeHTML }}
+          {{ end }}
             {{ $title }}
           </span>
         </a>

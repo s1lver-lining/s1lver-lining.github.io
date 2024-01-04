@@ -6,15 +6,16 @@ Do something about broken links in WUs main page. Maybe juste remove them in the
 links to files mentinoned in the text at the en of a content section
 
 ## Display
+tools code file list at the end of list pages
 404 page
 hero in starlight
 hero in WUs ?
-tools code file list at the end of list pages
-
+click on images to zoom in
 process markdown the github way to fix tables
 
 ## Feature
 Download button when displaying code files
+Icons for section if svg present
 
 ## Fix content adaptation
 update links to other pages

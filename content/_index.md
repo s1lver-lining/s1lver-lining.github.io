@@ -7,7 +7,7 @@ toc: false
 {{< headimage src="images/bright-banner.jpg#gh-light-mode-only" >}}
 
 
-This is a frontend for my writeups. I also share my notes on various security-related topics in [here](/sl).
+This is a frontend for [writeups](/wu). I also share my notes on various security-related topics in [here](/sl).
 
 ### Socials
 

@@ -3,6 +3,8 @@
 import os
 import json
 
+from update_links import update_links
+
 README_FILENAME = "README.md"
 INDEX_FILENAME = "_index.md"
 TOPICS_FILENAME = "topics.json"
@@ -17,6 +19,10 @@ def process_tools_dir(directory: str) -> None:
 
     For each folder, create an empty _index.md file
     and for each file create a mardown copy with code blocks.
+
+    The name of the code file is the name of the original file with a -<extension> suffix,
+    else, hugo crashes when building file.ext and file.ext.py for example.
+    This will not be nessesary anymore if we store the content of the submodules outsite of the content directory.
     
     Args:
         directory (str): Path to the Tools directory (ex: /path/to/Tools)
@@ -26,8 +32,12 @@ def process_tools_dir(directory: str) -> None:
 
     # If the name of the directory is not "Tools", create an empty _index.md file
     if last_dir not in TOOLS_DIRNAMES:
+        content = ""
+        if os.path.isfile(os.path.join(directory, README_FILENAME)):
+            with open(os.path.join(directory, README_FILENAME), 'r') as f:
+                content = f.read()
         with open(os.path.join(directory, INDEX_FILENAME), 'w') as f:
-            f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nmath: true\nlayout: code-list---\n')
+            f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nmath: true\nlayout: code-list\n---\n{content}')
 
     # Process each file in the directory
     for file in os.listdir(directory):
@@ -38,15 +48,22 @@ def process_tools_dir(directory: str) -> None:
             process_tools_dir(file_path)
             continue
 
-        path_name, file_ext = os.path.splitext(file_path)
-        if file_ext in CODE_BLACKLIST or file_ext == "":
-            continue
+        # If the file is a file, process it
+        else:
 
-        # Create a hugo version of the file
-        with open(file_path, 'rb') as f:
-            content = f.read()
-        with open(path_name + ".md", 'wb') as f:
-            f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
+            # If the file is not a code file, skip it
+            path_name, file_ext = os.path.splitext(file_path)
+            if not file_ext in CODE_BLACKLIST and file_ext != "":
+                # Create a hugo version of the file
+                with open(file_path, 'rb') as f:
+                    content = f.read()
+
+                # Check for name conflicts
+                if os.path.isfile(os.path.join(directory, path_name + "-" + file_ext[1:])):
+                    print(f"WARNING: {path_name + '-' + file_ext[1:]} exists in {directory} and conflicts with {file}. Skipping {file}")
+
+                with open(path_name + "-" + file_ext[1:] + ".md", 'wb') as f:
+                    f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
 
 
 def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str) -> None:
@@ -78,9 +95,37 @@ def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir
     if order != -1:
         with open(readme_file, 'r') as f:
             content = f.read()
-        with open(index_file, 'w') as f:
-            f.write(f'---\ntitle: {last_dir}\nweight: {order}\nmath: true\n---\n{content}')
+        
+        # Replace tabs in content with 4 spaces
+        content = content.replace('\t', '    ')
 
+        # Update the links in the content
+        content = update_links(content, CODE_BLACKLIST)
+
+        # Add the order to the front matter
+        content = f'---\ntitle: {last_dir}\nweight: {order}\nmath: true\n---\n{content}'
+
+        with open(index_file, 'w') as f:
+            f.write(content)
+
+def is_file_in_tools_dir(file: str) -> bool:
+    """
+    Check if a file is in the Tools directory
+
+    Args:
+        file (str): Path to the file (ex: /path/to/file)
+    
+    Returns:
+        bool: True if the file is in the Tools directory, False otherwise
+    """
+
+    # List directories in the path
+    dirs = file.split(os.sep)
+
+    for d in dirs:
+        if d in TOOLS_DIRNAMES:
+            return True
+    return False
 
 def main():
 
@@ -98,18 +143,18 @@ def main():
         last_dir = os.path.basename(directory)
 
         # If the README.md file exists, pour it to _index.md
-        if os.path.isfile(readme_file):
+        if os.path.isfile(readme_file) and not is_file_in_tools_dir(readme_file):
             process_readme_file(directory, readme_file, index_file, last_dir)
         
         # If the directory is named "Tools", create a special _index.md file
         elif last_dir in TOOLS_DIRNAMES:
             last_last_dir = os.path.basename(os.path.dirname(directory))
             with open(index_file, 'w') as f:
-                f.write(f'---\ntitle: {last_last_dir} {last_dir}\nsidebar:\n  exclude: true\nmath: true\nroottoolsection: true\n---\n')
+                f.write(f'---\ntitle: {last_last_dir} {last_dir}\nsidebar:\n  exclude: true\nmath: true\nroottoolsection: true\nlayout: code-list\n---\n')
             process_tools_dir(directory)
 
         # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar
-        else:
+        elif not is_file_in_tools_dir(readme_file):
             with open(index_file, 'w') as f:
                 f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nmath: true\n---\n')
         

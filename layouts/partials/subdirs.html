@@ -1,32 +1,32 @@
 <div class="hextra-cards gap-4 grid not-prose print:hidden" style="--rows: 2;">
-
   {{- /* List the subdirectories in cards */ -}}
   {{ with $items := union .RegularPages .Sections }}
     {{ $items = where $items "Params.sidebar.exclude" "!=" true }}
-      {{ range $items.ByWeight }}
-        {{ $title := .LinkTitle | default .File.BaseFileName }}
-        {{ $linkClass := "hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900" }}
-        {{ $href := .RelPermalink }}
-        <a
-          class="hextra-card group flex flex-col justify-start overflow-hidden rounded-lg border border-gray-200 text-current no-underline dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 {{ $linkClass }}"
-          href="{{ $href }}"
-        >
-          <span class="flex font-semibold items-start gap-2 p-4 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
-            {{ if .Params.svg }}
-            {{ $path := "" }}
-            {{ with .File }}
-                  {{ $path = .Path }}
-            {{ else }}
-                  {{ $path = .Path }}
-            {{ end }}
-            {{ $lastdir := last 1 (split $path "/") }}
-            {{ $lastdir = index $lastdir 0 }}
-            {{ $path = replace $path $lastdir "" }}
-            {{ $icon := readFile (printf "%s/icon.svg" $path) }}
-            {{ $icon | safeHTML }}
+    {{ range $items.ByWeight }}
+      {{ $title := .LinkTitle | default .File.BaseFileName }}
+      {{ $linkClass := "hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900" }}
+      {{ $href := .RelPermalink }}
+      <a
+        class="hextra-card group flex flex-col justify-start overflow-hidden rounded-lg border border-gray-200 text-current no-underline dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 {{ $linkClass }}"
+        href="{{ $href }}"
+      >
+        <span class="flex font-semibold items-start gap-2 p-4 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
+          {{ if .Params.svg }}
+          {{ $path := "" }}
+          {{ with .File }}
+                {{ $path = .Path }}
+          {{ else }}
+                {{ $path = .Path }}
           {{ end }}
-            {{ $title }}
-          </span>
-        </a>
-      {{ end }}
+          {{ $lastdir := last 1 (split $path "/") }}
+          {{ $lastdir = index $lastdir 0 }}
+          {{ $path = replace $path $lastdir "" }}
+          {{ $icon := readFile (printf "%s/icon.svg" $path) }}
+          {{ $icon | safeHTML }}
+        {{ end }}
+          {{ $title }}
+        </span>
+      </a>
     {{ end }}
+  {{ end }}
+</div>

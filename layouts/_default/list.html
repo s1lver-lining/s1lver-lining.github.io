@@ -15,6 +15,7 @@
 
           <div class="border-t pt-8 dark:border-neutral-800 contrast-more:border-neutral-400 dark:contrast-more:border-neutral-400 mt-12">
             {{ partial "subdirs.html" . }}
+            {{ partial "tools.html" (dict "context" .) }}
           </div>
         </div>
         {{ partial "components/last-updated.html" . }}

@@ -37,7 +37,7 @@ def process_tools_dir(directory: str) -> None:
             with open(os.path.join(directory, README_FILENAME), 'r') as f:
                 content = f.read()
         with open(os.path.join(directory, INDEX_FILENAME), 'w') as f:
-            f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nmath: true\nlayout: code-list\n---\n{content}')
+            f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nexcludeSearch: true\nmath: true\nlayout: code-list\n---\n{content}')
 
     # Process each file in the directory
     for file in os.listdir(directory):
@@ -63,7 +63,7 @@ def process_tools_dir(directory: str) -> None:
                     print(f"WARNING: {path_name + '-' + file_ext[1:]} exists in {directory} and conflicts with {file}. Skipping {file}")
 
                 with open(path_name + "-" + file_ext[1:] + ".md", 'wb') as f:
-                    f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
+                    f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nexcludeSearch: true\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
 
 
 def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str) -> None:
@@ -156,14 +156,21 @@ def main():
         # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar
         elif not is_file_in_tools_dir(readme_file):
             with open(index_file, 'w') as f:
-                f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nmath: true\n---\n')
+                f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nexcludeSearch: true\nmath: true\n---\n')
         
 
     # Prepend front matter to the _index.md file of the root directory
     with open(os.path.join(base_dir, README_FILENAME), 'r') as f:
         content = f.read()
+
+    # Replace tabs in content with 4 spaces
+    content = content.replace('\t', '    ')
+
+    # Update the links in the content
+    content = update_links(content, CODE_BLACKLIST)
+
     with open(os.path.join(base_dir, INDEX_FILENAME), 'w') as f:
-        f.write(f'---\nlayout: sectionroot\ntoc: false\nmath: true\n---\n{content}')
+        f.write(f'---\nlayout: sectionroot\ntoc: false\nexcludeSearch: true\nmath: true\n---\n{content}')
 
 if __name__ == "__main__":
     main()

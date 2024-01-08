@@ -2,11 +2,9 @@
 about page
 
 # Content adaptation
-Do something about broken links in WUs main page. Maybe just remove them in the repo?
 links to files mentinoned in the text at the end of a content section
 
 ## Display
-404 page
 hero in starlight
 hero in WUs ?
 

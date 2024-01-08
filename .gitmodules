@@ -1,6 +1,7 @@
 [submodule "themes/hextra"]
 	path = themes/hextra
 	url = https://github.com/imfing/hextra.git
+	branch = main
 [submodule "content/sl"]
 	path = content/sl
 	url = https://github.com/s1lver-lining/Starlight

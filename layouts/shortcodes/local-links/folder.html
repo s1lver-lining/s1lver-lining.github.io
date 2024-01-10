@@ -1,0 +1,10 @@
+{{- $name := .Get "name" -}}
+{{- $path := .Get "path" -}}
+
+
+<li class="flex list-none locallink">
+  <a href="{{ $path }}" class="inline-flex cursor-default items-center py-1  hover:opacity-60">
+    {{- partial "utils/icon" (dict "name" "folder" "attributes" "width=1em") -}}
+    <span class="ml-1">{{ $name | markdownify }}</span>
+  </a>
+</li>

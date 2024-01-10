@@ -4,7 +4,12 @@
 
 .content :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) li {
     margin-bottom: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+li.locallink {
+    margin-bottom: 0rem;
+    margin-top: 0rem;
 }
 
 

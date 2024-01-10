@@ -2,7 +2,7 @@
 about page
 
 # Content adaptation
-links to files mentinoned in the text at the end of a content section
+handle callouts/ (definition-theorem-proof)
 
 ## Display
 hero in starlight

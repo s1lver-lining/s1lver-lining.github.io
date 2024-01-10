@@ -4,6 +4,7 @@ import os
 import json
 
 from update_links import update_links
+from add_file_links import add_file_links
 
 README_FILENAME = "README.md"
 INDEX_FILENAME = "_index.md"
@@ -66,7 +67,7 @@ def process_tools_dir(directory: str) -> None:
                     f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nexcludeSearch: true\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
 
 
-def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str) -> None:
+def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str, filename_translation_dict:dict) -> None:
     """
     Process the README.md file of a directory:
     - Copy the content of the README.md file to the _index.md file
@@ -77,6 +78,7 @@ def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir
         readme_file (str): Path to the README.md file (ex: /path/to/README.md)
         index_file (str): Path to the _index.md file (ex: /path/to/_index.md)
         last_dir (str): Name of the directory (ex: to)
+        filename_translation_dict (dict): Dictionary of filename translations
     """
 
     # Find the order of the folder in the $directory/../topics.json file if it exists
@@ -100,7 +102,10 @@ def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir
         content = content.replace('\t', '    ')
 
         # Update the links in the content
-        content = update_links(content, CODE_BLACKLIST)
+        content = update_links(content, CODE_BLACKLIST, filename_translation_dict)
+
+        # Add file shortcode to the content
+        content = add_file_links(content, filename_translation_dict)
 
         # Add the order to the front matter
         content = f'---\ntitle: {last_dir}\nweight: {order}\nmath: true\n---\n{content}'
@@ -132,6 +137,9 @@ def main():
     # Define the base directory as the first argument of the script
     base_dir = os.sys.argv[1]
 
+    # Filename translation dict
+    filename_translation_dict = {}
+
     # Use os.walk to recursively search for README.md files
     for directory, _, _ in os.walk(base_dir):
 
@@ -144,7 +152,7 @@ def main():
 
         # If the README.md file exists, pour it to _index.md
         if os.path.isfile(readme_file) and not is_file_in_tools_dir(readme_file):
-            process_readme_file(directory, readme_file, index_file, last_dir)
+            process_readme_file(directory, readme_file, index_file, last_dir, filename_translation_dict)
         
         # If the directory is named "Tools", create a special _index.md file
         elif last_dir in TOOLS_DIRNAMES:
@@ -167,10 +175,9 @@ def main():
     content = content.replace('\t', '    ')
 
     # Update the links in the content
-    content = update_links(content, CODE_BLACKLIST)
+    content = update_links(content, CODE_BLACKLIST, filename_translation_dict)
 
     with open(os.path.join(base_dir, INDEX_FILENAME), 'w') as f:
         f.write(f'---\nlayout: sectionroot\ntoc: false\nexcludeSearch: true\nmath: true\n---\n{content}')
-
 if __name__ == "__main__":
     main()

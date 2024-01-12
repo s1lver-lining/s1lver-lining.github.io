@@ -22,11 +22,11 @@
     {{ partial "search.html" }}
   </div>
   <div class="hextra-scrollbar overflow-y-auto overflow-x-hidden p-4 grow md:h-[calc(100vh-var(--navbar-height)-var(--menu-height))]">
-    <ul class="flex flex-col gap-1 md:hidden">
-      <!-- Nav -->
+    <ul class="flex flex-col gap-1 md:hidden">  
+    <!-- Nav -->
       {{- $currentPage := . -}}
       {{- range site.Menus.main -}}
-        {{- if or (ne .Params.type "toggle") (ne .Params.type "search") -}}
+        {{- if and (ne .Params.type "toggle") (ne .Params.type "search") -}}
           {{- $link := .URL -}}
           {{- $external := strings.HasPrefix $link "http" -}}
           {{- with .PageRef -}}
@@ -38,16 +38,19 @@
             title="{{ or (T .Identifier) .Name | safeHTML }}"
             href="{{ $link }}"
             {{ if $external }}target="_blank" rel="noreferer"{{ end }}
-            class="text-sm contrast-more:text-gray-700 contrast-more:dark:text-gray-100 relative -ml-2 hidden whitespace-nowrap p-2 md:inline-block"
+            class="text-sm contrast-more:text-gray-700 contrast-more:dark:text-gray-100 relative -ml-2 md:hidden whitespace-nowrap p-2 md:inline-block"
           >
             <span class="text-center">{{ or (T .Identifier) .Name | safeHTML }}</span>
           </a>
         {{- end -}}
       {{- end -}}
       
-      <!-- Sidebar -->
-      {{ template "sidebar-main" (dict "context" $navRoot "pageURL" $pageURL "page" $context "toc" (.toc | default false)) -}}
-      {{ template "sidebar-footer" }}
+      <!-- Sidebar if not on home page -->
+      {{- if not (eq $pageURL site.Home.RelPermalink) -}}
+        {{ template "sidebar-main" (dict "context" $navRoot "pageURL" $pageURL "page" $context "toc" (.toc | default false)) -}}
+        {{ template "sidebar-footer" }}
+      {{- end -}}
+
     </ul>
 
     <!-- Sidebar on large screen -->

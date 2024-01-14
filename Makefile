@@ -8,9 +8,13 @@ build: prebuild
 generate:
 	git submodule update --init --recursive
 
+update-content:
+	git submodule update --remote content/sl
+	git submodule update --remote content/wu
+
 submodules:
 	git submodule update --recursive --remote
 
-prebuild:
+prebuild: update-content
 	scripts/prebuild.py content/sl
 	scripts/prebuild.py content/wu

@@ -26,9 +26,7 @@ params:
   theme:
     default: system
     displayToggle: false
-  editURL:
-    enable: true
-    base: https://github.com/s1lver-lining/s1lver-lining.github.io/tree/main/content
+
   
 
 

@@ -26,6 +26,8 @@ params:
   theme:
     default: system
     displayToggle: false
+  editURL:
+    enable: true
 
   
 

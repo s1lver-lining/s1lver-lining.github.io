@@ -1,4 +1,5 @@
 import os
+import settings
 
 class Page():
     def __init__(self, content_path:str, target_path:str) -> None:
@@ -13,6 +14,13 @@ class Page():
         self.target_path = target_path
         self.front_matter = {}
         self.FORCE_BYTES = False
+
+        self.add_front_matter('originalPath', self.content_path)
+
+        sections = self.content_path.split('/')
+        section_path = "/".join(sections[:2])
+        if section_path in settings.submodule_dict:
+            self.add_front_matter('remotePath', settings.submodule_dict[section_path] + settings.REMOTE_PATH + "/" + "/".join(sections[2:]))
 
     def get_content_path(self) -> str:
         """

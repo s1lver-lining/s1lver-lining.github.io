@@ -5,6 +5,9 @@ build: prebuild
 	rm -rf public
 	hugo
 
+dependencies:
+	pip install nbconvert
+	
 generate:
 	git submodule update --init --recursive
 

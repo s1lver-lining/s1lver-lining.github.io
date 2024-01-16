@@ -40,6 +40,8 @@ jobs:
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb          
       - name: Install Dart Sass
         run: sudo snap install dart-sass
+      - name: Install jupyter-nbconvert
+        run: pip install nbconvert
       - name: Checkout
         uses: actions/checkout@v4
         with:

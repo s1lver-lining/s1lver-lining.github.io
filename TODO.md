@@ -3,7 +3,7 @@ about page
 
 # Content adaptation
 handle callouts/ (definition-theorem-proof)
-handle and display ipynb and pdf files
+handle and display pdf files
 link to the corresponding github page for content
 link to the corresponding github page for code
 

@@ -1,6 +1,7 @@
 import argparse
 import os
 import re
+import settings
 
 def extract_paragraphs(content:str) -> list:
     """
@@ -84,13 +85,12 @@ def create_file_shortcode(filename:str, path:str) -> str:
     return "{{< local-links/file name=\"" + filename + "\" path=\"" + path + "\" >}}"
         
 
-def add_file_links(content:str, filename_translation_dict:dict) -> str:
+def add_file_links(content:str) -> str:
     """
     Add links to mentioned files at the bottom of content paragraphs
 
     Args:
         content (str): Content of the file
-        filename_translation_dict (dict): Dictionary of filename translations
     """
     paragraphs = extract_paragraphs(content)
     result_lines = content.split('\n')
@@ -103,8 +103,8 @@ def add_file_links(content:str, filename_translation_dict:dict) -> str:
             offset += 1
             for l in local_links:
                 filename = os.path.basename(l[1].strip("/"))
-                if filename in filename_translation_dict:
-                    filename = filename_translation_dict[filename]
+                if filename in settings.filename_translation_dict:
+                    filename = settings.filename_translation_dict[filename]
                 shortcode = "        " + create_file_shortcode(filename, l[1])
                 result_lines.insert(p[1]+offset+1, shortcode)
                 offset += 1

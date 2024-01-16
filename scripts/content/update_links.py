@@ -1,6 +1,7 @@
 import re
+import settings
 
-def update_links(content:str, code_blacklist:list, filename_translation_dict:dict) -> str:
+def update_links(content:str) -> str:
     """
     Update the links to local ressources in the content to be valid using lower case urls
     
@@ -28,7 +29,7 @@ def update_links(content:str, code_blacklist:list, filename_translation_dict:dic
             # If the link have at least a directory, use it as a link
             if "/" in prev_link:
                 new_link = "".join(prev_link.split("README.md")).lower().replace(" ", "-").replace("%20", "-")
-                filename_translation_dict[new_link.split("/")[-2]] = prev_link.split("/")[-2].replace("%20", " ")
+                settings.filename_translation_dict[new_link.split("/")[-2]] = prev_link.split("/")[-2].replace("%20", " ")
                 content = content.replace(prev_link, new_link)
             continue
 
@@ -41,9 +42,9 @@ def update_links(content:str, code_blacklist:list, filename_translation_dict:dic
                 filename = new_link.split("/")[-1]
                 extension = filename.split(".")[-1].split("#")[0].split("?")[0]
                 full_extension = "." + extension
-                if full_extension not in code_blacklist:
+                if full_extension not in settings.CODE_BLACKLIST:
                     new_link = new_link[::-1].replace(".", "-", 1)[::-1]
-                    filename_translation_dict[new_link.split("/")[-1]] = filename
+                    settings.filename_translation_dict[new_link.split("/")[-1]] = filename
             content = content.replace(prev_link, new_link)
             continue
 

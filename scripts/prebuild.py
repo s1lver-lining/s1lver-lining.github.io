@@ -3,18 +3,12 @@
 import os
 import json
 
-from update_links import update_links
-from add_file_links import add_file_links
+import settings
+from page.IndexPage import IndexPage
+from page.CodePage import CodePage
+from page.CodeIndexPage import CodeIndexPage
 
-README_FILENAME = "README.md"
-INDEX_FILENAME = "_index.md"
-TOPICS_FILENAME = "topics.json"
-ICON_FILENAME = "icon.svg"
-
-TOOLS_DIRNAMES = ["Tools", "tools", "_files", "_Files"]
-CODE_BLACKLIST = [".md", ".png", ".jpg"]
-
-def process_tools_dir(directory: str) -> None:
+def process_tools_dir(directory:str, code_blacklist:list=settings.CODE_BLACKLIST) -> None:
     """
     Create a hugo version of the Tools directory:
 
@@ -27,18 +21,16 @@ def process_tools_dir(directory: str) -> None:
     
     Args:
         directory (str): Path to the Tools directory (ex: /path/to/Tools)
+        code_blacklist (list): List of code extensions to ignore (ex: [".md", ".png", ".jpg"])
     """
 
     last_dir = os.path.basename(directory)
 
-    # If the name of the directory is not "Tools", create an empty _index.md file
-    if last_dir not in TOOLS_DIRNAMES:
-        content = ""
-        if os.path.isfile(os.path.join(directory, README_FILENAME)):
-            with open(os.path.join(directory, README_FILENAME), 'r') as f:
-                content = f.read()
-        with open(os.path.join(directory, INDEX_FILENAME), 'w') as f:
-            f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nexcludeSearch: true\nmath: true\nlayout: code-list\n---\n{content}')
+    # If the name of the directory is not "Tools", create an possibly empty _index.md file
+    if last_dir not in settings.TOOLS_DIRNAMES:
+        page = CodeIndexPage(os.path.join(directory, settings.README_FILENAME), os.path.join(directory, settings.INDEX_FILENAME))
+        page.set_title(last_dir)
+        page.write()
 
     # Process each file in the directory
     for file in os.listdir(directory):
@@ -54,20 +46,16 @@ def process_tools_dir(directory: str) -> None:
 
             # If the file is not a code file, skip it
             path_name, file_ext = os.path.splitext(file_path)
-            if not file_ext in CODE_BLACKLIST and file_ext != "":
-                # Create a hugo version of the file
-                with open(file_path, 'rb') as f:
-                    content = f.read()
-
+            if not file_ext in code_blacklist and file_ext != "":
                 # Check for name conflicts
                 if os.path.isfile(os.path.join(directory, path_name + "-" + file_ext[1:])):
                     print(f"WARNING: {path_name + '-' + file_ext[1:]} exists in {directory} and conflicts with {file}. Skipping {file}")
 
-                with open(path_name + "-" + file_ext[1:] + ".md", 'wb') as f:
-                    f.write(f'---\ntitle: {file}\nsidebar:\n  exclude: false\nexcludeSearch: true\nmath: true\nlayout: code\n---\n```'.encode('utf-8') + file_ext[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8'))
+                page = CodePage(file_path, path_name + "-" + file_ext[1:] + ".md", file_ext)
+                page.set_title(file)
+                page.write()
 
-
-def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str, filename_translation_dict:dict) -> None:
+def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir:str) -> None:
     """
     Process the README.md file of a directory:
     - Copy the content of the README.md file to the _index.md file
@@ -78,12 +66,11 @@ def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir
         readme_file (str): Path to the README.md file (ex: /path/to/README.md)
         index_file (str): Path to the _index.md file (ex: /path/to/_index.md)
         last_dir (str): Name of the directory (ex: to)
-        filename_translation_dict (dict): Dictionary of filename translations
     """
 
     # Find the order of the folder in the $directory/../topics.json file if it exists
     order = 0
-    topics_file = os.path.join(os.path.dirname(directory), TOPICS_FILENAME)
+    topics_file = os.path.join(os.path.dirname(directory), settings.TOPICS_FILENAME)
     if os.path.isfile(topics_file):
         with open(topics_file, 'r') as f:
             topics = json.load(f)
@@ -95,23 +82,10 @@ def process_readme_file(directory:str, readme_file:str, index_file:str, last_dir
     # Copy the content of the README.md file to the _index.md file
     # only if the order is not -1
     if order != -1:
-        with open(readme_file, 'r') as f:
-            content = f.read()
-        
-        # Replace tabs in content with 4 spaces
-        content = content.replace('\t', '    ')
-
-        # Update the links in the content
-        content = update_links(content, CODE_BLACKLIST, filename_translation_dict)
-
-        # Add file shortcode to the content
-        content = add_file_links(content, filename_translation_dict)
-
-        # Add the order to the front matter
-        content = f'---\ntitle: {last_dir}\nweight: {order}\nmath: true\n---\n{content}'
-
-        with open(index_file, 'w') as f:
-            f.write(content)
+        page = IndexPage(readme_file, index_file)
+        page.set_title(last_dir)
+        page.set_weight(order)
+        page.write()
 
 def is_file_in_tools_dir(file: str) -> bool:
     """
@@ -128,7 +102,7 @@ def is_file_in_tools_dir(file: str) -> bool:
     dirs = file.split(os.sep)
 
     for d in dirs:
-        if d in TOOLS_DIRNAMES:
+        if d in settings.TOOLS_DIRNAMES:
             return True
     return False
 
@@ -137,47 +111,43 @@ def main():
     # Define the base directory as the first argument of the script
     base_dir = os.sys.argv[1]
 
-    # Filename translation dict
-    filename_translation_dict = {}
-
     # Use os.walk to recursively search for README.md files
     for directory, _, _ in os.walk(base_dir):
 
         # Define the path of the _index.md and README.md files
-        readme_file = os.path.join(directory, README_FILENAME)
-        index_file = os.path.join(directory, INDEX_FILENAME)
+        readme_file = os.path.join(directory, settings.README_FILENAME)
+        index_file = os.path.join(directory, settings.INDEX_FILENAME)
 
         # Last directory name
         last_dir = os.path.basename(directory)
 
         # If the README.md file exists, pour it to _index.md
         if os.path.isfile(readme_file) and not is_file_in_tools_dir(readme_file):
-            process_readme_file(directory, readme_file, index_file, last_dir, filename_translation_dict)
+            process_readme_file(directory, readme_file, index_file, last_dir)
         
         # If the directory is named "Tools", create a special _index.md file
-        elif last_dir in TOOLS_DIRNAMES:
+        elif last_dir in settings.TOOLS_DIRNAMES:
             last_last_dir = os.path.basename(os.path.dirname(directory))
-            with open(index_file, 'w') as f:
-                f.write(f'---\ntitle: {last_last_dir} {last_dir}\nsidebar:\n  exclude: true\nmath: true\nroottoolsection: true\nlayout: code-list\n---\n')
+
+            page = CodeIndexPage(readme_file, index_file)
+            page.set_title(last_last_dir + " " + last_dir.strip("_"))
+            page.add_front_matter('roottoolsection', 'true')
+            page.write()
+
             process_tools_dir(directory)
 
         # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar
         elif not is_file_in_tools_dir(readme_file):
-            with open(index_file, 'w') as f:
-                f.write(f'---\ntitle: {last_dir}\nsidebar:\n  exclude: true\nexcludeSearch: true\nmath: true\n---\n')
-        
+            page = IndexPage(readme_file, index_file)
+            page.set_title(last_dir)
+            page.exclude_from_index()
+            page.write()
 
-    # Prepend front matter to the _index.md file of the root directory
-    with open(os.path.join(base_dir, README_FILENAME), 'r') as f:
-        content = f.read()
+    page = IndexPage(os.path.join(base_dir, settings.README_FILENAME), os.path.join(base_dir, settings.INDEX_FILENAME))
+    page.set_layout('sectionroot')
+    page.add_front_matter('excludeSearch', 'true')
+    page.set_toc(False)
+    page.write()
 
-    # Replace tabs in content with 4 spaces
-    content = content.replace('\t', '    ')
-
-    # Update the links in the content
-    content = update_links(content, CODE_BLACKLIST, filename_translation_dict)
-
-    with open(os.path.join(base_dir, INDEX_FILENAME), 'w') as f:
-        f.write(f'---\nlayout: sectionroot\ntoc: false\nexcludeSearch: true\nmath: true\n---\n{content}')
 if __name__ == "__main__":
     main()

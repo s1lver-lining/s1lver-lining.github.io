@@ -8,7 +8,7 @@ from page.IndexPage import IndexPage
 from page.CodePage import CodePage
 from page.CodeIndexPage import CodeIndexPage
 
-def process_tools_dir(directory:str, code_blacklist:list=settings.CODE_BLACKLIST) -> None:
+def process_tools_dir(directory:str, depth:int=0) -> None:
     """
     Create a hugo version of the Tools directory:
 
@@ -26,11 +26,16 @@ def process_tools_dir(directory:str, code_blacklist:list=settings.CODE_BLACKLIST
 
     last_dir = os.path.basename(directory)
 
-    # If the name of the directory is not "Tools", create an possibly empty _index.md file
-    if last_dir not in settings.TOOLS_DIRNAMES:
-        page = CodeIndexPage(os.path.join(directory, settings.README_FILENAME), os.path.join(directory, settings.INDEX_FILENAME))
-        page.set_title(last_dir)
-        page.write()
+    # Create a _index.md file in the directory
+    page = CodeIndexPage(os.path.join(directory, settings.README_FILENAME), os.path.join(directory, settings.INDEX_FILENAME))
+    page.set_title(last_dir)
+
+    # If the directory is the main "Tools", set it's front matter
+    if last_dir in settings.TOOLS_DIRNAMES and depth == 0:
+        page.set_title(os.path.basename(last_dir) + " " + last_dir.strip("_"))
+        page.add_front_matter('roottoolsection', 'true')
+
+    page.write()
 
     # Process each file in the directory
     for file in os.listdir(directory):
@@ -38,20 +43,21 @@ def process_tools_dir(directory:str, code_blacklist:list=settings.CODE_BLACKLIST
 
         # If the file is a directory, process it
         if os.path.isdir(file_path):
-            process_tools_dir(file_path)
-            continue
+            process_tools_dir(file_path, depth+1)
 
         # If the file is a file, process it
         else:
 
             # If the file is not a code file, skip it
             path_name, file_ext = os.path.splitext(file_path)
-            if not file_ext in code_blacklist and file_ext != "":
-                # Check for name conflicts
-                if os.path.isfile(os.path.join(directory, path_name + "-" + file_ext[1:])):
-                    print(f"WARNING: {path_name + '-' + file_ext[1:]} exists in {directory} and conflicts with {file}. Skipping {file}")
+            if not file_ext in settings.CODE_BLACKLIST and file_ext != "":
+                new_name = path_name + "-" + file_ext[1:]
 
-                page = CodePage(file_path, path_name + "-" + file_ext[1:] + ".md", file_ext)
+                # Check for name conflicts
+                if os.path.isfile(os.path.join(directory, new_name)):
+                    print(f"WARNING: {new_name} exists in {directory} and conflicts with {file}. Skipping {file}")
+
+                page = CodePage(file_path, new_name + ".md", file_ext)
                 page.set_title(file)
                 page.write()
 
@@ -125,15 +131,8 @@ def main():
         if os.path.isfile(readme_file) and not is_file_in_tools_dir(readme_file):
             process_readme_file(directory, readme_file, index_file, last_dir)
         
-        # If the directory is named "Tools", create a special _index.md file
+        # If the directory is named "Tools", process possible code files
         elif last_dir in settings.TOOLS_DIRNAMES:
-            last_last_dir = os.path.basename(os.path.dirname(directory))
-
-            page = CodeIndexPage(readme_file, index_file)
-            page.set_title(last_last_dir + " " + last_dir.strip("_"))
-            page.add_front_matter('roottoolsection', 'true')
-            page.write()
-
             process_tools_dir(directory)
 
         # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar

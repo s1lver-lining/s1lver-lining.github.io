@@ -1,9 +1,4 @@
 import subprocess
-import random
-
-from settings import CODE_BLACKLIST, filename_translation_dict
-from content.update_links import update_links
-from content.add_file_links import add_file_links
 
 from page.Page import Page
 
@@ -15,7 +10,6 @@ class CodePage(Page):
     def __init__(self, content_path:str, target_path:str, extension:str) -> None:
         super().__init__(content_path, target_path)
         self.extension = extension
-
         self.FORCE_BYTES = True
 
         self.set_layout('code')
@@ -39,5 +33,4 @@ class CodePage(Page):
         proc = subprocess.run(['jupyter-nbconvert', '--to', 'markdown', '--stdin', '--stdout'], input=content, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         content = proc.stdout
 
-        return content
-    
+        return content    

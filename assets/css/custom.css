@@ -33,3 +33,40 @@ html.dark img[src$="#gh-light-mode-only"] {
 span svg {
     display: inline-block;
 }
+
+/* Callouts: sets the styles */
+.callout {
+    padding-left: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    margin-top: 1.5rem;
+    background-color: hsl(var(--primary-hue) var(--primary-saturation) 39%/.05);
+}
+
+:is(html[class~="dark"] .callout) {
+    background-color: hsl(var(--primary-hue) var(--primary-saturation) 77%/.1);
+}
+
+#definition-callout {
+    border-left: 3px solid #2ca308;
+}
+
+#property-callout {
+    border-left: 3px solid #014ca3;
+}
+
+#theorem-callout {
+    border-left: 3px solid #e40606;
+}
+
+
+/* Notebooks: fix overline in outputs */
+:is(html[class~="dark"] .content pre :where(code):not(:where(.code-block code, [class~="not-prose"], [class~="not-prose"] *))) {
+    background-color: rgb(255 255 255 / 0.0);
+    border-color: rgb(255 255 255 / 0.0);
+}
+
+.content pre :where(code):not(:where(.code-block code, [class~="not-prose"], [class~="not-prose"] *)) {
+    background-color: rgb(0 0 0 / 0.0);
+    border-color: rgb(0 0 0 / 0.0);
+}

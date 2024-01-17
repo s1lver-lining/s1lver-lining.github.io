@@ -5,7 +5,7 @@ ICON_FILENAME = "icon.svg"
 
 TOOLS_DIRNAMES = ["Tools", "tools", "_files", "_Files"]
 CODE_BLACKLIST = [".md", ".png", ".jpg"]
-
+CALLOUT_LIST = ["definition", "property", "theorem"]
 filename_translation_dict = {}
 
 REMOTE_PATH = "/tree/main"

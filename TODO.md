@@ -2,18 +2,18 @@
 about page
 
 # Content adaptation
-handle callouts/ (definition-theorem-proof)
 handle and display pdf files
-link to the corresponding github page for content
-link to the corresponding github page for code
+Replace top content links with icons
+Fix missing { in set definition
 
 ## Display
 hero in starlight
 hero in WUs ?
 
 ## Feature
-Download button when displaying code files
+Download button and github page when displaying code files
 Icons for section if svg present
+Setup tailwindcss with hugo and theme
 
 ## Fix the theme
 sidebar: do not show down arrow if children are excluded

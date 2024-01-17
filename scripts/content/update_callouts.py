@@ -1,4 +1,5 @@
 import argparse
+import settings
 
 def extract_callouts(content:str) -> list:
     """
@@ -66,15 +67,20 @@ def create_callout_shortcode(content:str, callout:tuple) -> str:
     callout_type = lines[start][1:].split('*')[1].strip()
     callout_name = lines[start][1:].split('*')[2].strip()
 
-    result_lines.append("{{< callout/{} name=\"{}\" >}}".format(callout_type.lower(), callout_name))
-    started = False
-    for i in range(start+1, end+1):
-        if lines[i] != ">" or started:
-            result_lines.append(lines[i][1:])
-            started = True
-    while result_lines[-1] == "":
-        result_lines.pop()
-    result_lines.append("{{< /callout/{} >}}".format(callout_type.lower()))
+    if callout_type.lower() in settings.CALLOUT_LIST:
+
+        result_lines.append("{{< callout/" + callout_type.lower() + " name=\"" + callout_name + "\" >}}")
+        started = False
+        for i in range(start+1, end+1):
+            if lines[i] != ">" or started:
+                result_lines.append(lines[i][1:])
+                started = True
+        while result_lines[-1] == "":
+            result_lines.pop()
+        result_lines.append("{{< /callout/" + callout_type.lower() + " >}}")
+
+    else:
+        result_lines = lines[start:end+1]
     return '\n'.join(result_lines)
 
 def update_callouts(content:str) -> str:

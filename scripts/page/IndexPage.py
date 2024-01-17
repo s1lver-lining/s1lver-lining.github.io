@@ -1,5 +1,6 @@
 from content.update_links import update_links
 from content.add_file_links import add_file_links
+from content.update_callouts import update_callouts
 
 from page.Page import Page
 
@@ -22,5 +23,8 @@ class IndexPage(Page):
 
         # Add file shortcode to the content
         content = add_file_links(content)
+
+        # Replace callouts with the appropriate shortcodes
+        content = update_callouts(content)
 
         return super().process_content(content)

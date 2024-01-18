@@ -1,0 +1,13 @@
+{{- /* Link to this file without the trailing / */ -}}
+{{ $dllink := .Params.originalPath }}
+
+<a class="mr-1" href="{{ $dllink | urlize | absURL }}" download="">
+<button
+  title="Download file"
+  class="border dark:border-white/40 h-8 rounded-md px-2 text-left text-gray-600 transition-colors dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-primary-100/5 dark:hover:text-gray-50"
+  type="button"
+  aria-label="Download file">
+  <div class="flex items-center gap-2 capitalize">
+    {{- partial "utils/icon.html" (dict "name" "download" "attributes" "height=16" ) -}}
+  </div>
+</button></a>

@@ -15,6 +15,7 @@ class CodePage(Page):
         self.set_layout('code')
         self.add_front_matter('math', 'true')
         self.exclude_from_index()
+        self.set_toc(False)
 
     def process_content_bytes(self, content:bytes) -> bytes:
 

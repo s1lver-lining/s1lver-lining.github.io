@@ -1,7 +1,11 @@
 {{- $name := .Get "name" -}}
 <div>
-<div id="property-callout" class="callout" >
-  <strong class="font-bold">{{ $name }}</strong>
-  <span class="block sm:inline">{{- .Inner | markdownify -}}</span>
+<div id="definition-callout" class="callout pl-4 py-2 mt-5 border-l-4 border-l-blue-600" >
+  {{- if $name -}}
+  <div class="pb-2">
+    <strong class="font-bold text-blue-600">{{ $name }}</strong>
+  </div>
+  {{- end -}}
+  <span class="block">{{- .Inner | markdownify -}}</span>
 </div>
 </div>

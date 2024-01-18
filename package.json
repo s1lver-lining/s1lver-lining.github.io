@@ -1,0 +1,28 @@
+{
+  "name": "s1lver-lining.github.io",
+  "version": "1.0.0",
+  "description": "This static website is a frontend for my writeups and notes on various security-related topics.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s1lver-lining/s1lver-lining.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s1lver-lining/s1lver-lining.github.io/issues"
+  },
+  "homepage": "https://github.com/s1lver-lining/s1lver-lining.github.io#readme",
+  "devDependencies": {
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.0.0",
+    "tailwindcss": "^3.4.1"
+  }
+}

@@ -2,11 +2,10 @@
 
 {{- $changeTheme := (T "changeTheme") | default "Change theme" -}}
 
-
 <button
   title="{{ $changeTheme }}"
   data-theme="light"
-  class="theme-toggle group h-8 rounded-md px-2 py-2 text-left text-xs font-medium text-gray-600 transition-colors dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-primary-100/5 dark:hover:text-gray-50 ltr:ml-auto rtl:mr-auto"
+  class="theme-toggle group rounded-md px-2 py-2 text-left text-xs font-medium text-gray-600 transition-colors dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-primary-100/5 dark:hover:text-gray-50 ltr:ml-auto rtl:mr-auto"
   type="button"
   aria-label="{{ $changeTheme }}"
 >

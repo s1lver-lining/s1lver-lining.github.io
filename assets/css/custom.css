@@ -12,17 +12,14 @@ li.locallink {
     margin-top: 0rem;
 }
 
-
 .content :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
     margin-top: 1rem;
 }
-
 
 /* Hide images with #gh-dark-mode-only at the end of the URL if light mode is enabled */
 html:not(.dark) img[src$="#gh-dark-mode-only"] {
     display: none;
 }
-
 
 /* Hide images with #gh-light-mode-only at the end of the URL if dark mode is enabled */
 html.dark img[src$="#gh-light-mode-only"] {
@@ -36,29 +33,12 @@ span svg {
 
 /* Callouts: sets the styles */
 .callout {
-    padding-left: 1rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    margin-top: 1.5rem;
     background-color: hsl(var(--primary-hue) var(--primary-saturation) 39%/.05);
 }
 
 :is(html[class~="dark"] .callout) {
     background-color: hsl(var(--primary-hue) var(--primary-saturation) 77%/.1);
 }
-
-#definition-callout {
-    border-left: 3px solid #2ca308;
-}
-
-#property-callout {
-    border-left: 3px solid #014ca3;
-}
-
-#theorem-callout {
-    border-left: 3px solid #e40606;
-}
-
 
 /* Notebooks: fix overline in outputs */
 :is(html[class~="dark"] .content pre :where(code):not(:where(.code-block code, [class~="not-prose"], [class~="not-prose"] *))) {

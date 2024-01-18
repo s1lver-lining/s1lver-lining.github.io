@@ -28,14 +28,14 @@ def update_links(content:str) -> str:
 
             # If the link have at least a directory, use it as a link
             if "/" in prev_link:
-                new_link = "".join(prev_link.split("README.md")).lower().replace(" ", "-").replace("%20", "-")
+                new_link = "".join(prev_link.split("README.md")).lower().replace(" - ", "-").replace("%20-%20", "-").replace(" ", "-").replace("%20", "-")
                 settings.filename_translation_dict[new_link.split("/")[-2]] = prev_link.split("/")[-2].replace("%20", " ")
                 content = content.replace(prev_link, new_link)
             continue
 
         # Relative link to a local file -> make the link lower case
         if prev_link.startswith(".") and not prev_link.startswith("./_img"):
-            new_link = prev_link.lower().replace(" ", "-").replace("%20", "-")
+            new_link = prev_link.lower().replace(" - ", "-").replace("%20-%20", "-").replace(" ", "-").replace("%20", "-")
 
             # If the file have an extension, replace the last dot by a dash
             if "." in new_link.split("/")[-1]:

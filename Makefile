@@ -1,12 +1,17 @@
 dev: prebuild
+	npx postcss --watch  --config postcss.config.js --env production themes/hextra/assets/css/styles.css -o assets/css/compiled/main.css &
 	hugo server --noHTTPCache
 
 build: prebuild
 	rm -rf public
 	hugo
 
+build-css:
+	npx postcss --config postcss.config.js --env production themes/hextra/assets/css/styles.css -o assets/css/compiled/main.css
+
 dependencies:
 	pip install nbconvert
+	npm install
 	
 generate:
 	git submodule update --init --recursive

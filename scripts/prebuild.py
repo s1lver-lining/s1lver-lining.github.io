@@ -32,7 +32,7 @@ def process_tools_dir(directory:str, depth:int=0) -> None:
 
     # If the directory is the main "Tools", set it's front matter
     if last_dir in settings.TOOLS_DIRNAMES and depth == 0:
-        page.set_title(os.path.basename(last_dir) + " " + last_dir.strip("_"))
+        page.set_title(last_dir.strip("_"))
         page.add_front_matter('roottoolsection', 'true')
 
     page.write()

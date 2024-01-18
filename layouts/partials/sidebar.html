@@ -188,7 +188,9 @@
   >
     {{- .title -}}
     {{- with .context }}
-      {{- if or .RegularPages .Sections }}
+    {{- $items := union .RegularPages .Sections -}}
+    {{- $items = where $items "Params.sidebar.exclude" "!=" true -}}
+      {{- if gt (len $items) 0 -}}
         <span class="hextra-sidebar-collapsible-button">
           {{- template "sidebar-collapsible-button" -}}
         </span>

@@ -15,7 +15,7 @@ class Page():
         self.front_matter = {}
         self.FORCE_BYTES = False
 
-        self.add_front_matter('originalPath', self.content_path)
+        self.add_front_matter('originalPath', self.content_path.replace("content/", ""))
 
         sections = self.content_path.split('/')
         section_path = "/".join(sections[:2])

@@ -115,3 +115,26 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   
 
+document.addEventListener('DOMContentLoaded', function () {
+  let starsContainer = document.querySelector('.stars-container'); // Change this line
+
+  for (let i = 0; i < 100; i++) {
+    let star = document.createElement('div');
+    star.className = 'star bg-black dark:bg-white text-black dark:text-white';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.left = Math.random() * 100 + '%';
+    size = 2
+    r = Math.random()
+    if ( r > 0.7) {
+      size = 1
+    }
+    if ( r > 0.95) {
+      size = 3
+    }
+    star.style.width = size + 'px';
+    star.style.animationDelay = -Math.random() * 20 + 's'; // Add this line
+    star.style.animationDuration = Math.random() * 10 + 10 + 's'; // Add this line
+    starsContainer.appendChild(star);
+  }
+}
+);

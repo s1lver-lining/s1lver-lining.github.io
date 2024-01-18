@@ -2,7 +2,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.content :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) li {
+.content :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *, .block ul)) li {
     margin-bottom: 1rem;
     margin-top: 2rem;
 }
@@ -49,4 +49,16 @@ span svg {
 .content pre :where(code):not(:where(.code-block code, [class~="not-prose"], [class~="not-prose"] *)) {
     background-color: rgb(0 0 0 / 0.0);
     border-color: rgb(0 0 0 / 0.0);
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    animation: blink 10s infinite ease-in-out;
+  }
+
+@keyframes blink {
+0%, 100% { opacity: 0; }
+50% { opacity: 1; }
 }

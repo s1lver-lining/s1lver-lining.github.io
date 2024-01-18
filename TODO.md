@@ -7,7 +7,6 @@ Replace top content links with icons
 Fix missing { in set definition
 
 ## Display
-hero in starlight
 hero in WUs ?
 
 ## Feature

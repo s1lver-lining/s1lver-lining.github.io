@@ -58,6 +58,7 @@ module.exports = {
       green: colors.green,
       lime: colors.lime,
       verdant: '#2ca308',
+      back: '#111111',
       primary: {
         50: makePrimaryColor(97),
         100: makePrimaryColor(94),

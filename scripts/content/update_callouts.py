@@ -64,8 +64,8 @@ def create_callout_shortcode(content:str, callout:tuple) -> str:
     result_lines = []
     start = callout[0]
     end = callout[1]
-    callout_type = lines[start][1:].split('*')[1].strip()
-    callout_name = lines[start][1:].split('*')[2].strip()
+    callout_type = lines[start][1:].split('*')[1].strip(":").strip()
+    callout_name = lines[start][1:].split('*')[2].strip(":").strip()
 
     if callout_type.lower() in settings.CALLOUT_LIST:
 

@@ -1022,7 +1022,7 @@ video {
   --tw-border-opacity: 1;
   border-left-color: rgb(220 38 38 / var(--tw-border-opacity));
 }
-.border-l-verdant {
+.border-l-verdant-500 {
   --tw-border-opacity: 1;
   border-left-color: rgb(44 163 8 / var(--tw-border-opacity));
 }
@@ -1364,9 +1364,9 @@ video {
 .text-transparent {
   color: transparent;
 }
-.text-verdant {
+.text-verdant-600 {
   --tw-text-opacity: 1;
-  color: rgb(44 163 8 / var(--tw-text-opacity));
+  color: rgb(66 196 8 / var(--tw-text-opacity));
 }
 .text-white {
   --tw-text-opacity: 1;

@@ -1,13 +1,13 @@
 # Content
-about page
+- about page
 
 # Content adaptation
-handle and display pdf files
-Replace top content links with icons
-Fix missing { in set definition
+- handle and display pdf files
+- Replace top content links with icons
+- find a better way to add space between content lists
 
 ## Display
-hero in WUs ?
+- hero in WUs ?
 
 ## Feature
-Icons for section if svg present
+- Icons for section if svg present

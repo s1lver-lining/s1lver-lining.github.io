@@ -1364,9 +1364,9 @@ video {
 .text-transparent {
   color: transparent;
 }
-.text-verdant-600 {
+.text-verdant-500 {
   --tw-text-opacity: 1;
-  color: rgb(66 196 8 / var(--tw-text-opacity));
+  color: rgb(44 163 8 / var(--tw-text-opacity));
 }
 .text-white {
   --tw-text-opacity: 1;
@@ -3079,6 +3079,10 @@ body {
 :is(html[class~="dark"] .dark\:text-slate-100) {
   --tw-text-opacity: 1;
   color: rgb(241 245 249 / var(--tw-text-opacity));
+}
+:is(html[class~="dark"] .dark\:text-verdant-600) {
+  --tw-text-opacity: 1;
+  color: rgb(66 196 8 / var(--tw-text-opacity));
 }
 :is(html[class~="dark"] .dark\:text-yellow-200) {
   --tw-text-opacity: 1;

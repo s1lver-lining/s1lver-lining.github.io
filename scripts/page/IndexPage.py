@@ -27,4 +27,7 @@ class IndexPage(Page):
         # Replace callouts with the appropriate shortcodes
         content = update_callouts(content)
 
+        content = content.replace("\{", " \lbrace ").replace("\}", " \\rbrace ")
+        content = content.replace("\\\\", "\\\\\\\\")
+
         return super().process_content(content)

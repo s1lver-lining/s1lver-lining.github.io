@@ -14,6 +14,7 @@ module.exports = {
   content: [
     './**/hugo_stats.json',
     './layouts/**/*.html',
+    './assets/js/**/*.js',
   ],
   safelist: [
     'max-w-screen-xl',

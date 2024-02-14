@@ -9,7 +9,6 @@
             <h1 class="pt-10 text-white z-10 starlight-title">
               <span class="bg-white dark:bg-dark text-5xl">Starlight CTF</span></h1>
             <div class="stars-container absolute inset-0 z-0">
-              <div class="star bg-black dark:bg-white" style="top: 67.708%; left: 30.0754%"></div>
             </div>
           </div>
           {{ $markdown := readFile "content/sl/Introduction/README.md" }}
@@ -30,6 +29,15 @@
         {{ partial "components/last-updated.html" . }}
         {{ partial "components/pager.html" . }}
         {{ partial "components/comments.html" . }}
+        
+        {{$suspicious := resources.Get "js/suspicious-code.js" }}
+        {{- $scripts := slice $suspicious | resources.Concat "js/suspicious.js" -}}
+        {{- if hugo.IsProduction -}}
+          {{- $scripts = $scripts | minify | fingerprint -}}
+        {{- end -}}
+        <script defer src="{{ $scripts.RelPermalink }}" integrity="{{ $scripts.Data.Integrity }}"></script>
+
+
       </main>
     </article>
   </div>

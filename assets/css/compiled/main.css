@@ -1044,6 +1044,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+}
 .bg-neutral-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(250 250 250 / var(--tw-bg-opacity));
@@ -1081,10 +1085,6 @@ video {
 .bg-yellow-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 252 232 / var(--tw-bg-opacity));
-}
-.bg-green-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
 }
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
@@ -3004,6 +3004,10 @@ body {
 :is(html[class~="dark"] .dark\:bg-gray-50\/10) {
   background-color: rgb(249 250 251 / 0.1);
 }
+:is(html[class~="dark"] .dark\:bg-green-600) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+}
 :is(html[class~="dark"] .dark\:bg-neutral-800) {
   --tw-bg-opacity: 1;
   background-color: rgb(38 38 38 / var(--tw-bg-opacity));
@@ -3034,10 +3038,6 @@ body {
 }
 :is(html[class~="dark"] .dark\:bg-yellow-700\/30) {
   background-color: rgb(161 98 7 / 0.3);
-}
-:is(html[class~="dark"] .dark\:bg-green-600) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
 }
 :is(html[class~="dark"] .dark\:from-gray-100) {
   --tw-gradient-from: #f3f4f6 var(--tw-gradient-from-position);

@@ -2,13 +2,14 @@
 
 import os
 import json
+import argparse
 
 import settings
 from page.IndexPage import IndexPage
 from page.CodePage import CodePage
 from page.CodeIndexPage import CodeIndexPage
 
-def process_tools_dir(directory:str, depth:int=0) -> None:
+def process_tools_dir(directory:str, depth:int=0, use_cache=True) -> None:
     """
     Create a hugo version of the Tools directory:
 
@@ -43,7 +44,7 @@ def process_tools_dir(directory:str, depth:int=0) -> None:
 
         # If the file is a directory, process it
         if os.path.isdir(file_path):
-            process_tools_dir(file_path, depth+1)
+            process_tools_dir(file_path, depth+1, use_cache)
 
         # If the file is a file, process it
         else:
@@ -57,7 +58,7 @@ def process_tools_dir(directory:str, depth:int=0) -> None:
                 if os.path.isfile(os.path.join(directory, new_name)):
                     print(f"WARNING: {new_name} exists in {directory} and conflicts with {file}. Skipping {file}")
 
-                page = CodePage(file_path, new_name + ".md", file_ext)
+                page = CodePage(file_path, new_name + ".md", file_ext, use_cache)
                 page.set_title(file)
                 page.write()
 
@@ -112,10 +113,7 @@ def is_file_in_tools_dir(file: str) -> bool:
             return True
     return False
 
-def main():
-
-    # Define the base directory as the first argument of the script
-    base_dir = os.sys.argv[1]
+def main(base_dir, use_cache=True):
 
     # Use os.walk to recursively search for README.md files
     for directory, _, _ in os.walk(base_dir):
@@ -149,4 +147,8 @@ def main():
     page.write()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Build the hugo content from a git repository')
+    parser.add_argument('base_dir', type=str, help='Path to the base directory')
+    parser.add_argument('--no-cache', action='store_true', help='Do not use cache files')
+    args = parser.parse_args()
+    main(args.base_dir, not args.no_cache)

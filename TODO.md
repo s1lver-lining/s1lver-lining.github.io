@@ -2,9 +2,8 @@
 - about page
 
 # Content adaptation
-- handle and display pdf files
-- Replace top content links with icons
 - find a better way to add space between content lists
+- Replace top content links with icons
 
 ## Display
 - hero in WUs ?

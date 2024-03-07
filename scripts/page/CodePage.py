@@ -23,6 +23,8 @@ class CodePage(Page):
 
         if self.extension == '.ipynb':
             content = self.process_ipynb(content)
+        if self.extension == '.pdf':
+            content = 'Use the above buttons to interact with this file'.encode('utf-8')
         else:
             content = '```'.encode('utf-8') + self.extension[1:].encode('utf-8') + '\n'.encode('utf-8') + content + '\n````\n'.encode('utf-8')
         return super().process_content_bytes(content)

@@ -9,7 +9,7 @@ from page.IndexPage import IndexPage
 from page.CodePage import CodePage
 from page.CodeIndexPage import CodeIndexPage
 
-def process_tools_dir(directory:str, depth:int=0, use_cache=True) -> None:
+def process_tools_dir(directory:str, base_dir:str, depth:int=0, use_cache=True) -> None:
     """
     Create a hugo version of the Tools directory:
 
@@ -44,7 +44,7 @@ def process_tools_dir(directory:str, depth:int=0, use_cache=True) -> None:
 
         # If the file is a directory, process it
         if os.path.isdir(file_path):
-            process_tools_dir(file_path, depth+1, use_cache)
+            process_tools_dir(file_path, base_dir, depth=(depth+1), use_cache=use_cache)
 
         # If the file is a file, process it
         else:
@@ -58,7 +58,7 @@ def process_tools_dir(directory:str, depth:int=0, use_cache=True) -> None:
                 if os.path.isfile(os.path.join(directory, new_name)):
                     print(f"WARNING: {new_name} exists in {directory} and conflicts with {file}. Skipping {file}")
 
-                page = CodePage(file_path, new_name + ".md", file_ext, use_cache)
+                page = CodePage(file_path, base_dir, new_name + ".md", file_ext, use_cache)
                 page.set_title(file)
                 page.write()
 
@@ -131,14 +131,17 @@ def main(base_dir, use_cache=True):
         
         # If the directory is named "Tools", process possible code files
         elif last_dir in settings.TOOLS_DIRNAMES:
-            process_tools_dir(directory)
+            process_tools_dir(directory, base_dir, use_cache=use_cache)
 
         # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar
         elif not is_file_in_tools_dir(readme_file):
-            page = IndexPage(readme_file, index_file)
-            page.set_title(last_dir)
-            page.exclude_from_index()
-            page.write()
+            # Create a _index.md file in the directory if it is not basedir + utils or basedir + cache
+            dirname = os.path.dirname(readme_file)
+            if dirname != os.path.join(base_dir, settings.UTILS_DIRNAME) and dirname != os.path.join(base_dir, settings.CACHE_DIRNAME):
+                page = IndexPage(readme_file, index_file)
+                page.set_title(last_dir)
+                page.exclude_from_index()
+                page.write()
 
     page = IndexPage(os.path.join(base_dir, settings.README_FILENAME), os.path.join(base_dir, settings.INDEX_FILENAME))
     page.set_layout('sectionroot')

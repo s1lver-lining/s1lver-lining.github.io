@@ -3,6 +3,7 @@
 import os
 import json
 import argparse
+import time
 
 import settings
 from page.IndexPage import IndexPage
@@ -149,9 +150,75 @@ def main(base_dir, use_cache=True):
     page.set_toc(False)
     page.write()
 
+def watch(base_dir, use_cache=True):
+    """
+    Watches for changes in the base directory and rebuilds the hugo content if a change is detected in the README.md files
+    """
+
+    # Get the last modification time of the README.md files
+    last_modification_times = {}
+    for directory, _, _ in os.walk(base_dir):
+        readme_file = os.path.join(directory, settings.README_FILENAME)
+        if os.path.isfile(readme_file):
+            last_modification_times[readme_file] = os.path.getmtime(readme_file)
+    readme_file = os.path.join(base_dir, settings.README_FILENAME)
+    last_modification_times[readme_file] = os.path.getmtime(readme_file)
+
+    # Watch for changes in the base directory
+    while True:
+        for directory, _, _ in os.walk(base_dir):
+            readme_file = os.path.join(directory, settings.README_FILENAME)
+            if os.path.isfile(readme_file):
+                last_modification_time = os.path.getmtime(readme_file)
+                if last_modification_times[readme_file] != last_modification_time:
+                    print(f"[prebuild] Detected change in {readme_file}")
+                    index_file = os.path.join(directory, settings.INDEX_FILENAME)
+
+                    # Last directory name
+                    last_dir = os.path.basename(directory)
+
+                    # If the README.md file exists, pour it to _index.md
+                    if os.path.isfile(readme_file) and not is_file_in_tools_dir(readme_file):
+                        process_readme_file(directory, readme_file, index_file, last_dir)
+                    
+                    # If the directory is named "Tools", process possible code files
+                    elif last_dir in settings.TOOLS_DIRNAMES:
+                        process_tools_dir(directory, base_dir, use_cache=use_cache)
+
+                    # If the README.md file does not exist, create an empty _index.md file that does not appear in the sidebar
+                    elif not is_file_in_tools_dir(readme_file):
+                        # Create a _index.md file in the directory if it is not basedir + utils or basedir + cache
+                        dirname = os.path.dirname(readme_file)
+                        if dirname != os.path.join(base_dir, settings.UTILS_DIRNAME) and dirname != os.path.join(base_dir, settings.CACHE_DIRNAME):
+                            page = IndexPage(readme_file, index_file)
+                            page.set_title(last_dir)
+                            page.exclude_from_index()
+                            page.write()
+
+                    last_modification_times[readme_file] = os.path.getmtime(readme_file)
+
+        readme_file = os.path.join(base_dir, settings.README_FILENAME)
+        last_modification_time = os.path.getmtime(readme_file)
+        if last_modification_times[readme_file] != last_modification_time:
+            print(f"[prebuild] Detected change in {readme_file}")
+            page = IndexPage(os.path.join(base_dir, settings.README_FILENAME), os.path.join(base_dir, settings.INDEX_FILENAME))
+            page.set_layout('sectionroot')
+            page.add_front_matter('excludeSearch', 'true')
+            page.set_toc(False)
+            page.write()
+
+            last_modification_times[readme_file] = os.path.getmtime(readme_file)
+        time.sleep(1)
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Build the hugo content from a git repository')
     parser.add_argument('base_dir', type=str, help='Path to the base directory')
     parser.add_argument('--no-cache', action='store_true', help='Do not use cache files')
+    parser.add_argument('--watch', action='store_true', help='Watch for changes in the base directory')
     args = parser.parse_args()
-    main(args.base_dir, not args.no_cache)
+    if args.watch:
+        watch(args.base_dir, not args.no_cache)
+    else:
+        main(args.base_dir, not args.no_cache)

@@ -1,4 +1,6 @@
 dev: prebuild
+	scripts/prebuild.py --watch content/sl &
+	scripts/prebuild.py --watch content/wu &
 	npx postcss --watch  --config postcss.config.js --env production themes/hextra/assets/css/styles.css -o assets/css/compiled/main.css &
 	hugo server --noHTTPCache
 

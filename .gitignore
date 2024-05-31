@@ -15,3 +15,8 @@ hugo.linux
 # NodeJS
 /node_modules/
 package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+.venv

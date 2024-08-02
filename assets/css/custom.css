@@ -62,3 +62,7 @@ span svg {
 0%, 100% { opacity: 0; }
 50% { opacity: 1; }
 }
+
+html.dark .filter-white{
+    filter:  invert(100%);
+}

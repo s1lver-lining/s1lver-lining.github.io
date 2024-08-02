@@ -4,41 +4,18 @@
     {{ partial "toc.html" . }}
     <article class="w-full break-words flex min-h-[calc(100vh-var(--navbar-height))] min-w-0 justify-center pb-8 pr-[calc(env(safe-area-inset-right)-1.5rem)]">
       <main class="w-full min-w-0 max-w-6xl px-6 pt-4 md:px-12">
+        {{ partial "breadcrumb.html" . }}
         <div class="content">
-          <div id="starlight-bg" class="relative h-48 mb-10 text-center flex justify-center overflow-hidden">
-            <h1 class="pt-10 text-white z-10 starlight-title">
-              <span class="bg-white dark:bg-dark text-5xl hidden">Starlight CTF</span>
-            </h1>
-            <div class="stars-container absolute inset-0 z-0">
-            </div>
-          </div>
-          {{ $markdown := readFile "content/sl/Introduction/README.md" }}
+          <h1>{{ .Title }}</h1>
           {{ $heartHTML := "<span class='mr-1' style='color:rgb(228, 33, 33)'><svg height='20' class='group-data-[theme=light]:hidden' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' aria-hidden='true'><path stroke-linecap='round' stroke-linejoin='round' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'></path></svg></span>" }}
           {{ $passedHTML := "<span class='mr-1' style='color:rgb(34, 230, 50)'><svg height='20' class='group-data-[theme=light]:hidden' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' aria-hidden='true'><path stroke-linecap='round' stroke-linejoin='round' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg></span>" }}
           {{ $failedHTML := "<span class='mr-1' style='color:rgb(228, 33, 33)'><svg height='20' class='group-data-[theme=light]:hidden' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' aria-hidden='true'><path stroke-linecap='round' stroke-linejoin='round' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg></span>" }}
           {{ $warnHTML := "<span class='mr-1' style='color:rgb(255, 153, 19)'><svg height='20' class='group-data-[theme=light]:hidden' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' aria-hidden='true'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg></span>" }}
-          {{ $markdown | markdownify | replaceRE ":heart:" $heartHTML | replaceRE ":passed:" $passedHTML | replaceRE ":failed:" $failedHTML | replaceRE ":warn:" $warnHTML | replaceRE ":partial:" $warnHTML | safeHTML }}
-          <br>
-          {{ $markdown := "The source code for these notes is available on [this GitHub repository](https://github.com/s1lver-lining/Starlight)." }}
-          {{ $markdown | markdownify }}
-          
-          <div class="border-t pt-8 dark:border-neutral-800 contrast-more:border-neutral-400 dark:contrast-more:border-neutral-400 mt-12">
-            {{ partial "subdirs.html" . }}
-          </div>
-          </div>
+          {{ .Content | replaceRE ":heart:" $heartHTML | replaceRE ":passed:" $passedHTML | replaceRE ":failed:" $failedHTML | replaceRE ":warn:" $warnHTML | replaceRE ":partial:" $warnHTML | safeHTML }}
         </div>
         {{ partial "components/last-updated.html" . }}
         {{ partial "components/pager.html" . }}
         {{ partial "components/comments.html" . }}
-        
-        {{$suspicious := resources.Get "js/suspicious-code.js" }}
-        {{- $scripts := slice $suspicious | resources.Concat "js/suspicious.js" -}}
-        {{- if hugo.IsProduction -}}
-          {{- $scripts = $scripts | minify | fingerprint -}}
-        {{- end -}}
-        <script defer src="{{ $scripts.RelPermalink }}" integrity="{{ $scripts.Data.Integrity }}"></script>
-
-
       </main>
     </article>
   </div>

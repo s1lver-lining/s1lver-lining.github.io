@@ -12,25 +12,25 @@
 {{ end }}
 
 {{- define "tools-main" -}}
-<div class="hextra-filetree mt-6 mb-4 select-none text-sm text-gray-800 dark:text-gray-300 not-prose">
-    <div class="inline-block rounded-lg border px-4 py-2 dark:border-neutral-800">
+<div class="hextra-filetree hx:mt-6 hx:mb-4 hx:select-none hx:text-sm hx:text-gray-800 hx:dark:text-gray-300 not-prose">
+    <div class="hx:inline-block hx:rounded-lg hx:border hx:px-4 hx:py-2 hx:dark:border-neutral-800">
       {{- $state := "open" -}}
-      <li class="group flex list-none flex-col">
-        <button class="hextra-filetree-folder inline-flex cursor-pointer items-center py-1 hover:opacity-60">
-          <span data-state="{{ $state }}" class="data-[state=open]:hidden">
+      <li class="hx:group hx:flex hx:list-none hx:flex-col">
+        <button class="hextra-filetree-folder hx:inline-flex hx:cursor-pointer hx:items-center hx:py-1 hx:hover:opacity-60">
+          <span data-state="{{ $state }}" class="hx:data-[state=open]:hidden">
             {{- partial "utils/icon" (dict "name" "folder" "attributes" "width=1em") -}}
           </span>
-          <span data-state="{{ $state }}" class="data-[state=closed]:hidden">
+          <span data-state="{{ $state }}" class="hx:data-[state=closed]:hidden">
             {{- partial "utils/icon" (dict "name" "folder-open" "attributes" "width=1em") -}}
           </span>
-          <span class="ml-1">Files</span>
+          <span class="hx:ml-1">Files</span>
         </button>
-        <ul data-state="{{ $state }}" class="pl-5 data-[state=closed]:hidden">
+        <ul data-state="{{ $state }}" class="hx:pl-5 hx:data-[state=closed]:hidden">
           {{ template "tools-tree" (dict "context" .context "level" 0 "page" .page "pageURL" .pageURL "toc" (.toc | default false)) }}
         </ul>
       </li>
     </div>
-  </div>  
+  </div>
 {{- end -}}
 
 {{- define "tools-tree" -}}
@@ -43,14 +43,14 @@
   {{- $level := .level -}}
   {{- $toc := .toc | default false -}}
 
-  <div class="ltr:pr-0 overflow-hidden">
-    <ul class='relative flex flex-col gap-1 before:absolute before:inset-y-1 before:w-px before:bg-gray-200 before:content-[""] ltr:ml-3 ltr:pl-3 ltr:before:left-0 rtl:mr-3 rtl:pr-3 rtl:before:right-0 dark:before:bg-neutral-800'>
+  <div class="hx:ltr:pr-0 hx:overflow-hidden">
+    <ul class='hx:relative hx:flex hx:flex-col hx:gap-1 hx:before:absolute hx:before:inset-y-1 hx:before:w-px hx:before:bg-gray-200 hx:before:content-[""] hx:ltr:ml-3 hx:ltr:pl-3 hx:ltr:before:left-0 hx:rtl:mr-3 hx:rtl:pr-3 hx:rtl:before:right-0 hx:dark:before:bg-neutral-800'>
         {{- with $items := .context.RegularPages -}}
           {{- range $items.ByWeight }}
-          <li class="flex list-none">
-            <a href="{{ .RelPermalink }}" class="inline-flex cursor-pointer items-center py-1 hover:opacity-60">
+          <li class="hx:flex hx:list-none">
+            <a href="{{ .RelPermalink }}" class="hx:inline-flex hx:cursor-pointer hx:items-center hx:py-1 hx:hover:opacity-60">
               {{- partial "utils/icon" (dict "name" "document-text" "attributes" "width=1em") -}}
-              <span class="ml-1">{{ .LinkTitle | markdownify }}</span>
+              <span class="hx:ml-1">{{ .LinkTitle | markdownify }}</span>
             </a>
           </li>
           {{- end -}}
@@ -58,17 +58,17 @@
         {{- with $items := .context.Sections -}}
         {{- range $items.ByWeight }}
           {{- $state := .Params.state | default "closed" -}}
-          <li class="group flex list-none flex-col">
-            <button class="hextra-filetree-folder inline-flex cursor-pointer items-center py-1 hover:opacity-60">
-              <span data-state="{{ $state }}" class="data-[state=open]:hidden">
+          <li class="hx:group hx:flex hx:list-none hx:flex-col">
+            <button class="hextra-filetree-folder hx:inline-flex hx:cursor-pointer hx:items-center hx:py-1 hx:hover:opacity-60">
+              <span data-state="{{ $state }}" class="hx:data-[state=open]:hidden">
                 {{- partial "utils/icon" (dict "name" "folder" "attributes" "width=1em") -}}
               </span>
-              <span data-state="{{ $state }}" class="data-[state=closed]:hidden">
+              <span data-state="{{ $state }}" class="hx:data-[state=closed]:hidden">
                 {{- partial "utils/icon" (dict "name" "folder-open" "attributes" "width=1em") -}}
               </span>
-              <span class="ml-1">{{ .Name }}</span>
+              <span class="hx:ml-1">{{ .Name }}</span>
             </button>
-            <ul data-state="{{ $state }}" class="pl-5 data-[state=closed]:hidden">
+            <ul data-state="{{ $state }}" class="hx:pl-5 hx:data-[state=closed]:hidden">
               {{ template "tools-tree" dict "context" . "page" $page "pageURL" $pageURL "level" (add $level 1) "toc" $toc}}
             </ul>
           </li>

@@ -1,11 +1,11 @@
 {{- $name := .Get "name" -}}
 <div>
-<div id="definition-callout" class="callout pl-4 py-2 mt-5 border-l-4 border-l-red-600" >
+<div id="definition-callout" class="callout hx:pl-4 hx:py-2 hx:mt-5 hx:border-l-4 hx:border-l-red-600" >
   {{- if $name -}}
-  <div class="pb-2">
-    <strong class="font-bold text-red-600">{{ $name }}</strong>
+  <div class="hx:pb-2">
+    <strong class="hx:font-bold hx:text-red-600">{{ $name }}</strong>
   </div>
   {{- end -}}
-  <span class="block">{{- .Inner | markdownify -}}</span>
+  <span class="hx:block">{{- .Inner | markdownify -}}</span>
 </div>
 </div>

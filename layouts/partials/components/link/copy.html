@@ -1,15 +1,16 @@
 
-  
+
+
 <button
   title="Copy code"
-  class="full-code-copy group/copybtn mr-1 border dark:border-white/40 h-8 rounded-md px-2 text-left text-xs font-medium text-gray-600 transition-colors dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-primary-100/5 dark:hover:text-gray-50"
+  class="full-code-copy hx:group/copybtn hx:mr-1 hx:border hx:dark:border-white/40 hx:h-8 hx:rounded-md hx:px-2 hx:text-left hx:text-xs hx:font-medium hx:text-gray-600 hx:transition-colors hx:dark:text-gray-400 hx:hover:bg-gray-100 hx:hover:text-gray-900 hx:dark:hover:bg-primary-100/5 hx:dark:hover:text-gray-50"
   type="button"
   aria-label="Copy code"
 >
-    <div class="flex items-center gap-2 capitalize group-[.copied]/copybtn:hidden copy-icon pointer-events-none h-4 w-4">
+    <div class="hx:flex hx:items-center hx:gap-2 hx:capitalize hx:group-[.copied]/copybtn:hidden copy-icon hx:pointer-events-none hx:h-4 hx:w-4">
       {{- partial "utils/icon.html" (dict "name" "copy" "attributes" "height=16" ) -}}
     </div>
-    <div class="flex items-center gap-2 capitalize hidden group-[.copied]/copybtn:block success-icon pointer-events-none h-4 w-4">
+    <div class="hx:flex hx:items-center hx:gap-2 hx:capitalize hx:hidden hx:group-[.copied]/copybtn:block success-icon hx:pointer-events-none hx:h-4 hx:w-4">
       {{- partial "utils/icon.html" (dict "name" "check" "attributes" "height=16" ) -}}
     </div>
 </button>

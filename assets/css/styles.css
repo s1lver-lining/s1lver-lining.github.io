@@ -1,0 +1,26 @@
+/*
+ * Project Tailwind v4 entry point.
+ *
+ * It pulls in the Hextra theme's stylesheet (which owns the
+ * `@import "tailwindcss" prefix(hx)` directive, the `@theme` tokens and all
+ * component styles) and then layers our own customisations on top.
+ *
+ * Output is compiled to assets/css/compiled/main.css, which overrides the
+ * theme's prebuilt CSS via Hugo's asset precedence. Rebuild with `make build-css`.
+ */
+@import "../../themes/hextra/assets/css/styles.css";
+
+/* Always scan our own templates/scripts; the theme + project layouts are also
+   picked up by automatic detection, but we list ours explicitly to be safe. */
+@source "../../layouts";
+@source "../../assets/js";
+
+/* The content tree is huge and is prose, not templates — keep it out of the
+   class scan to avoid bloat and spurious utilities. */
+@source not "../../content";
+
+/* Project-specific design tokens (the theme defines primary, gray, etc.). */
+@theme {
+  --color-verdant-500: #2ca308;
+  --color-verdant-600: #42c408;
+}

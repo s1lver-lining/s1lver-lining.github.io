@@ -1,16 +1,16 @@
-<div class="hextra-cards gap-4 grid not-prose print:hidden" style="--rows: 2;">
+<div class="hextra-cards hx:gap-4 hx:grid not-prose hx:print:hidden" style="--rows: 2;">
   {{- /* List the subdirectories in cards */ -}}
   {{ with $items := union .RegularPages .Sections }}
     {{ $items = where $items "Params.sidebar.exclude" "!=" true }}
     {{ range $items.ByWeight }}
       {{ $title := .LinkTitle | default .File.BaseFileName }}
-      {{ $linkClass := "hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900" }}
+      {{ $linkClass := "hx:hover:border-gray-300 hx:bg-transparent hx:shadow-sm hx:dark:border-neutral-800 hx:hover:bg-slate-50 hx:hover:shadow-md hx:dark:hover:border-neutral-700 hx:dark:hover:bg-neutral-900" }}
       {{ $href := .RelPermalink }}
       <a
-        class="hextra-card group flex flex-col justify-start overflow-hidden rounded-lg border border-gray-200 text-current no-underline dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 {{ $linkClass }}"
+        class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden hx:rounded-lg hx:border hx:border-gray-200 hx:text-current hx:no-underline hx:dark:shadow-none hx:hover:shadow-gray-100 hx:dark:hover:shadow-none hx:shadow-gray-100 hx:active:shadow-sm hx:active:shadow-gray-200 hx:transition-all hx:duration-200 {{ $linkClass }}"
         href="{{ $href }}"
       >
-        <span class="flex font-semibold items-start gap-2 p-4 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
+        <span class="hx:flex hx:font-semibold hx:items-start hx:gap-2 hx:p-4 hx:text-gray-700 hx:hover:text-gray-900 hx:dark:text-neutral-200 hx:dark:hover:text-neutral-50">
           {{ if .Params.svg }}
           {{ $path := "" }}
           {{ with .File }}

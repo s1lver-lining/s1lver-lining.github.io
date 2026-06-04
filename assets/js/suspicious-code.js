@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let y = 0; y < p; y++) {
             if ((y * y) % p === ySquare) {
                 let star = document.createElement('div');
-                star.className = 'star bg-black dark:bg-white';
+                star.className = 'star hx:bg-black hx:dark:bg-white';
                 star.style.top = y + '%';
                 star.style.left = x/2 + '%';
                 size = 2
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (allEqual(output, target)) {
             console.log("You found the secret pattern! It was hidden in the stars all along!")
             let new_star = document.createElement('div');
-            new_star.className = 'star bg-green-500 dark:bg-green-600';
+            new_star.className = 'star hx:bg-green-500 hx:dark:bg-green-600';
             new_star.style.top = Math.random() * 100 + '%';
             new_star.style.left = Math.random() * 100 + '%';
             new_star.style.width = '2px';

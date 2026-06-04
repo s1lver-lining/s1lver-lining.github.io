@@ -33,6 +33,8 @@
     --hx-color-yellow-900: oklch(42.1% 0.095 57.708);
     --hx-color-green-100: oklch(96.2% 0.044 156.743);
     --hx-color-green-200: oklch(92.5% 0.084 155.995);
+    --hx-color-green-500: oklch(72.3% 0.219 149.579);
+    --hx-color-green-600: oklch(62.7% 0.194 149.214);
     --hx-color-green-900: oklch(39.3% 0.095 152.535);
     --hx-color-blue-100: oklch(93.2% 0.032 255.585);
     --hx-color-blue-200: oklch(88.2% 0.059 254.128);
@@ -817,6 +819,9 @@
   .hx\:bg-amber-100 {
     background-color: var(--hx-color-amber-100);
   }
+  .hx\:bg-black {
+    background-color: var(--hx-color-black);
+  }
   .hx\:bg-blue-100 {
     background-color: var(--hx-color-blue-100);
   }
@@ -828,6 +833,9 @@
   }
   .hx\:bg-green-100 {
     background-color: var(--hx-color-green-100);
+  }
+  .hx\:bg-green-500 {
+    background-color: var(--hx-color-green-500);
   }
   .hx\:bg-indigo-100 {
     background-color: var(--hx-color-indigo-100);
@@ -2458,6 +2466,11 @@
       background-color: var(--hx-color-dark);
     }
   }
+  .hx\:dark\:bg-green-600 {
+    &:where(.dark, .dark *) {
+      background-color: var(--hx-color-green-600);
+    }
+  }
   .hx\:dark\:bg-green-900\/30 {
     &:where(.dark, .dark *) {
       background-color: var(--hx-color-green-900);
@@ -2532,6 +2545,11 @@
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--hx-color-red-900) 30%, transparent);
       }
+    }
+  }
+  .hx\:dark\:bg-white {
+    &:where(.dark, .dark *) {
+      background-color: var(--hx-color-white);
     }
   }
   .hx\:dark\:bg-yellow-700\/30 {

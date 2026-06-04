@@ -7,8 +7,10 @@ async function sha256(message) {
 async function AES_CBC_encrypt(data, key) {
 
     // Preprare the data
-    const algorithm = { name: 'AES-CBC', length: 256 };
     const encodedText = new TextEncoder().encode(data);
+
+    // Prepare the key
+    const algorithm = { name: 'AES-CBC', length: 256 };
     const keyMaterial = await sha256(key);
     const AESkey = await crypto.subtle.importKey('raw', keyMaterial, algorithm, false, ['encrypt']);
   
@@ -27,6 +29,34 @@ async function AES_CBC_encrypt(data, key) {
     const encryptedBase64 = btoa(String.fromCharCode.apply(null, encryptedData));
   
     return encryptedBase64;
+}
+
+async function AES_CBC_decrypt(data, key) {
+
+    // Decode the base64 data
+    const encryptedData = new Uint8Array(Array.prototype.map.call(atob(data), (c) => c.charCodeAt(0)));
+
+    // Preprare the key
+    const algorithm = { name: 'AES-CBC', length: 256 };
+    const keyMaterial = await sha256(key);
+    const AESkey = await crypto.subtle.importKey('raw', keyMaterial, algorithm, false, ['decrypt']);
+
+    // Get the IV
+    const iv = encryptedData.slice(0, 16);
+
+    // Decrypt the text
+    let decryptedBuffer = null
+    try {
+        decryptedBuffer = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, AESkey, encryptedData.slice(16));
+    }
+    catch (e) {
+        return "Error decrypting data"
+    }
+
+    // Decode the text
+    const decryptedText = new TextDecoder().decode(decryptedBuffer);
+
+    return decryptedText;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -70,13 +100,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
       
 
-    output = `AAECAwQFBgcICQoLDA0OD/LHzij6W72uTzKCLy4tzcjceY+LJ2eA+Hu5JfjmemwWGZHC8aNwDwVsfLQmJUNhFjlakbw4yONsimksNSs3FQ/fo3l4kDZv97F79h5ghaj1vXSzOuyGRFchXHOrKi1LteRkKkj6AYHCBBoxDrtJMMkpmsMMy6lSww0uUM88oKRL+YsFuj2giWRDpqjGnOPmllOMJ+ils8+j8wMxfgnSmCwGrkEBtIJDlSzmp15AnS4qMfD+lmlQ2iUKKsb2q34LdfcUopnnVvAiHKORxEm4/u6WDFyr64q95WShcm2JSkze4mPvqI1MNdbnhFpunPvwGJS+YFsGJShEVSASQ5RFmEFba7gRUi4d4nC3IfMLUmoRI3rGYLAzIJbG5tjX0TgZug1M33PHkHGSKeYI/upJ32cuGqPIQougaRAdczYbm7v0JqAJ9gMW1kbU9utEpiPnZ5mxBjs1YaC+pzUZPfkpoxsMtzxJhmDR+2xiQ6HS0qtrDE69TAK/k0UJaYz5OnIz8zaX2ahrKeGl6IBmPlmJqcKVVfn9acEY8UXwzcRDX/4EbWzc2oks1a1aM8N5r/dtN8XTVpiWvSE14mKk8W8/B7s8sGOwoJXCqi4o/8IQAThtyPq16AZzWhhIdI5kYlU2gCGDRNSwJpgQh27dPJOKaONSyz6zRBD23TK+6MKbBV6BrDZ1jN+kBqR3IJETUwe/v8zbPUNt3Bi8KXqj6+um0VknqXY2BwU+zQxZ7/b1K6wVtkojTLsEbwPXngSy+KIqERF5OaefDBicgYLFi1bk7LkVGJkJ3Zaue537J6SlChyChC2qusf3rmNDgHx8x5e5YyTrK7cdDn1mzCi8Jx8wJOiMxDKMPzCcWgE5YooMx7AVCif6v+g1ncpL5nV3HoXoMvg1OxHMBGfTb/8zmKFWKYgJXojznaMEfxg23MlGVTs3F/ht4Kf2iC50VfZODz7PCSQjDDxLCcUqmiYOjGsx7G8rpcP3E4WnYX+erCarg2jNG2yVeXj9HD4nPKjQJieFO+dDQwmdDGggstZvqDsdghxvp4qXnbLWPl5exeB1U26q9upGZ44jbouSwgUzhxTVp/POxK8uz9DpDLw2duixy00T8e8Ksno50wKdG7wc3BM2e4JSi/h4Qq4x2ao2QT2egYaXVKURn0Oog+OrxIRSC9c=`
-    data = `If you pay attention to the stars, you may understand the patterns of the universe`
+    encrypted = `AAECAwQFBgcICQoLDA0OD/LHzij6W72uTzKCLy4tzcjceY+LJ2eA+Hu5JfjmemwWGZHC8aNwDwVsfLQmJUNhFjlakbw4yONsimksNSs3FQ/fo3l4kDZv97F79h5ghaj1vXSzOuyGRFchXHOrKi1LteRkKkj6AYHCBBoxDrtJMMkpmsMMy6lSww0uUM88oKRL+YsFuj2giWRDpqjGnOPmllOMJ+ils8+j8wMxfgnSmCwGrkEBtIJDlSzmp15AnS4qMfD+lmlQ2iUKKsb2q34LdfcUopnnVvAiHKORxEm4/u6WDFyr64q95WShcm2JSkze4mPvqI1MNdbnhFpunPvwGJS+YFsGJShEVSASQ5RFmEFba7gRUi4d4nC3IfMLUmoRI3rGYLAzIJbG5tjX0TgZug1M33PHkHGSKeYI/upJ32cuGqPIQougaRAdczYbm7v0JqAJ9gMW1kbU9utEpiPnZ5mxBjs1YaC+pzUZPfkpoxsMtzxJhmDR+2xiQ6HS0qtrDE69TAK/k0UJaYz5OnIz8zaX2ahrKeGl6IBmPlmJqcKVVfn9acEY8UXwzcRDX/4EbWzc2oks1a1aM8N5r/dtN8XTVpiWvSE14mKk8W8/B7s8sGOwoJXCqi4o/8IQAThtyPq16AZzWhhIdI5kYlU2gCGDRNSwJpgQh27dPJOKaONSyz6zRBD23TK+6MKbBV6BrDZ1jN+kBqR3IJETUwe/v8zbPUNt3Bi8KXqj6+um0VknqXY2BwU+zQxZ7/b1K6wVtkojTLsEbwPXngSy+KIqERF5OaefDBicgYLFi1bk7LkVGJkJ3Zaue537J6SlChyChC2qusf3rmNDgHx8x5e5YyTrK7cdDn1mzCi8Jx8wJOiMxDKMPzCcWgE5YooMx7AVCif6v+g1ncpL5nV3HoXoMvg1OxHMBGfTb/8zmKFWKYgJXojznaMEfxg23MlGVTs3F/ht4Kf2iC50VfZODz7PCSQjDDxLCcUqmiYOjGsx7G8rpcP3E4WnYX+erCarg2jNG2yVeXj9HD4nPKjQJieFO+dDQwmdDGggstZvqDsdghxvp4qXnbLWPl5exeB1U26q9upGZ44jbouSwgUzhxTVp/POxK8uz9DpDLw2duixy00T8e8Ksno50wKdG7wc3BM2e4JSi/h4Qq4x2ao2QT2egYaXVKURn0Oog+OrxIRSC9c=`
 
-    async function check_data(a, b, p, data) {
+    async function check_data(a, b, p, encrypted) {
 
-        let key = a.toString() + b.toString() + p.toString()
-        if(await AES_CBC_encrypt(data, key) == output) {
+        const key = a.toString() + b.toString() + p.toString()
+        const decrypted = await AES_CBC_decrypt(encrypted, key)
+        const hashed = await sha256(decrypted)
+        const output = new Uint8Array(hashed)
+
+        target = new Uint8Array([
+            139, 180, 166, 214, 75, 246, 89, 2, 204, 195, 244, 35, 66, 171, 119, 247, 115, 207, 30, 57, 21, 50, 7, 109, 130, 61, 5, 83, 190, 241, 2, 76
+        ])
+
+        const allEqual = (arr1, arr2) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+
+        if (allEqual(output, target)) {
             console.log("You found the secret pattern! It was hidden in the stars all along!")
             let new_star = document.createElement('div');
             new_star.className = 'star bg-green-500 dark:bg-green-600';
@@ -85,8 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
             new_star.style.width = '2px';
             new_star.style.animationDelay = -Math.random() * 20 + 's';
             new_star.style.animationDuration = Math.random() * 10 + 10 + 's';
+            starsContainer = document.querySelector('.stars-container');
             starsContainer.appendChild(new_star);
         }
     }
-    check_data(a, b, p, data)
+    check_data(a, b, p, encrypted)
 });

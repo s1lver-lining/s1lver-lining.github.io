@@ -33,7 +33,8 @@
         {{- partial "search.html" (dict "params" .Params) -}}
       {{- else -}}
         {{- if eq .Params.type "toggle" -}}
-          {{ partial "nav-toggle.html" }}
+          {{/* ml-auto pushes this and everything after it (search) to the right */}}
+          <div class="hx:ml-auto hx:flex hx:items-center">{{ partial "theme-toggle.html" (dict "iconHeight" 20 "hideLabel" true "location" "top" "class" "hx:p-1 hx:md:p-2") }}</div>
         {{- else -}}
           {{- $link := .URL -}}
           {{- $external := strings.HasPrefix $link "http" -}}

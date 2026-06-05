@@ -1,0 +1,14 @@
+# Development-only content sources (filename "module" => the [module] config key).
+#
+# Under `hugo server` (default environment = "development") the database content
+# is mounted live from the sibling working repositories instead of the committed
+# git submodules, so edits there show up immediately. Production and CI run
+# `hugo` (environment = "production"), which does NOT load this file and so
+# builds from the pinned submodules in content/sl and content/wu.
+mounts:
+  - source: ../Starlight
+    target: content/sl
+  - source: ../ctf-writeups
+    target: content/wu
+  - source: content/_index.md
+    target: content/_index.md

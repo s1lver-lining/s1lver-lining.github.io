@@ -61,3 +61,19 @@ menu:
 # *                        Markup configs                         * #
 # *                                                               * #
 # ================================================================= #
+
+markup:
+  goldmark:
+    renderer:
+      # Render raw HTML in the (trusted, self-authored) content instead of
+      # dropping it. Also silences the "Raw HTML omitted while rendering" warnings.
+      unsafe: true
+    extensions:
+      # Enable LaTeX math: the hextra render hook (render-passthrough.html)
+      # passes the delimited content to KaTeX. Single $...$ inline and $$...$$
+      # block are included alongside the \(...\) / \[...\] forms.
+      passthrough:
+        enable: true
+        delimiters:
+          block: [['\[', '\]'], ['$$', '$$']]
+          inline: [['\(', '\)'], ['$', '$']]
